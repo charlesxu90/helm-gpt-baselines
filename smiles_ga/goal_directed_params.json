@@ -1,0 +1,13 @@
+{
+    "gene_size": 300,
+    "generations": 500,
+    "n_jobs": 110,
+    "n_mutations": 200,
+    "output_dir": "/home/xiaopeng/Desktop/CPP_design/helm-gpt-baselines/smiles_ga",
+    "patience": 5,
+    "population_size": 100,
+    "random_start": false,
+    "seed": 42,
+    "smiles_file": "data/prior/prior.csv",
+    "suite": "v2"
+}
