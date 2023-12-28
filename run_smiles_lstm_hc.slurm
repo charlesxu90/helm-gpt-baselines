@@ -12,6 +12,6 @@
 module purge
 module load gcc
 source ~/miniconda3/etc/profile.d/conda.sh
-conda activate cpp-gen-env
+conda activate /home/xux/work/helm-gpt-baselines/env
 
 python -m smiles_lstm_hc.goal_directed_generation --model_path smiles_lstm_hc/model_final_0.217.pt --max_len 320 --keep_top 1000 --n_epochs 20 --smiles_file data/prior/prior.csv
