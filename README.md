@@ -13,6 +13,7 @@ instal required packages
 ```commandline
 pip install nltk joblib scikit-learn==0.23.2 numpy==1.21.4 loguru xgboost
 pip install guacamol  # help solving many warnings
+mamba install -c anaconda git-lfs
 ```
 
 ### Install dependencies to run agent
