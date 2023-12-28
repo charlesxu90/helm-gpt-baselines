@@ -1,0 +1,17 @@
+{
+    "allow_unspecified_stereocenters": true,
+    "fragstore_path": "frag_gt/data/fragment_libraries/guacamol_v1_all_fragstore_brics.pkl",
+    "generations": 500,
+    "mapelites": null,
+    "n_jobs": -1,
+    "n_mutations": 500,
+    "operators": null,
+    "output_dir": "/home/xiaopeng/Desktop/CPP_design/helm-gpt-baselines/frag_gt",
+    "patience": 5,
+    "population_size": 500,
+    "random_start": false,
+    "scorer": "counts",
+    "seed": 42,
+    "smiles_file": "data/prior/prior.csv",
+    "suite": "v2"
+}

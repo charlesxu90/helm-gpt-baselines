@@ -1,0 +1,32 @@
+name: helm-gpt-cmp-env
+
+channels:
+  - conda-forge
+  - defaults
+  - anaconda
+  - pytorch     # For torch series
+
+dependencies:
+  - python=3.8
+  - pip
+
+# jupyter-lab dependencies
+  - ipython           
+  - ipywidgets
+  - jupyterlab
+  - jupyterlab-git
+  - jupyterlab-nvdashboard
+  - jupyterlab-lsp
+  - matplotlib
+
+# machine learning & data analysis dependencies
+  - pytorch::pytorch
+  - nvidia::cudatoolkit=11.3  # Rely on GPU driver
+  - torchvision
+  - torchaudio
+  - tqdm
+  - numpy          
+  - scipy
+  - pandas
+  - tensorboard
+
