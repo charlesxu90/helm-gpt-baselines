@@ -29,7 +29,7 @@ def fingerprints_from_mol(molecule, radius=3, size=2048, hashed=False):
     return fp_np.reshape(1, -1)
 
 
-def average_agg_tanimoto(stock_vecs, gen_vecs, batch_size=5000, agg='max', device='cuda', p=1):
+def average_agg_tanimoto(stock_vecs, gen_vecs, batch_size=5000, agg='max', device='cpu', p=1):
     """
     For each molecule in gen_vecs finds closest molecule in stock_vecs.
     Returns average tanimoto score for between these molecules
@@ -157,11 +157,12 @@ class SAScorer:
 
 
 class Metrics:
-    def __init__(self, prior_path='data/prior/prior_ref.csv', n_jobs=100, input_type='smiles'):
+    def __init__(self, prior_path='data/prior/prior.csv', n_jobs=100, input_type='smiles'):
         train_set_cano_smi = pd.read_csv(prior_path, header=None)[0].tolist()
         self.train_set_cano_smi = train_set_cano_smi
         self.n_jobs = n_jobs
         self.input_type = 'helm' if input_type != 'smiles' else 'smiles'
+        self.ref_fps = np.vstack([fingerprints_from_mol(Chem.MolFromSmiles(smi)) for smi in train_set_cano_smi])
 
     def get_metrics(self, inputs):
         smiles = [get_cycpep_smi_from_helm(helm) for helm in inputs] if self.input_type == 'helm' else inputs
@@ -175,20 +176,25 @@ class Metrics:
         uniq_smis = list(set(valid_canon_smiles))
         uniq_mols = [Chem.MolFromSmiles(smi) for smi in uniq_smis]
 
+        device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
         fps = np.vstack([fingerprints_from_mol(mol) for mol in uniq_mols])
-        diversity = 1 - (average_agg_tanimoto(fps, fps, agg='mean', p=1)).mean()
+        diversity = 1 - (average_agg_tanimoto(fps, fps, agg='mean', p=1, device=device)).mean()
+
+        snn = average_agg_tanimoto(self.ref_fps, fps, agg='max', p=1, device=device)
         
         gen_smiles = mapper(self.n_jobs)(canonic_smiles, valid_canon_smiles)
         gen_smiles_set = set(gen_smiles) - {None}
         train_set = set(self.train_set_cano_smi)
         novelty = len(gen_smiles_set - train_set) / len(gen_smiles_set)
 
-        print(f"validity\tuniqueness\tdiversity\tnovelty")
-        print(f"{validity:.3f}\t{uniqueness:.3f}\t{diversity:.3f}\t{novelty:.3f}")
+        print(f"validity\tuniqueness\tdiversity\tsnn\tnovelty")
+        print(f"{validity:.3f}\t{uniqueness:.3f}\t{diversity:.3f}\t{snn:.3f}\t{novelty:.3f}")
         return {
             "validity": validity,
             "uniqueness": uniqueness,
             "diversity": diversity,
+            "snn": snn,  # "structural novelty"
             "novelty": novelty,
         }
 

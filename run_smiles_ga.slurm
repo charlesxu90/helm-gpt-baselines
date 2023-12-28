@@ -14,7 +14,9 @@ source ~/miniconda3/etc/profile.d/conda.sh
 conda activate /home/xux/work/helm-gpt-baselines/env
 
 ## SMILES GA
-python -m smiles_ga.goal_directed_generation --smiles_file data/prior/prior.csv --n_jobs 90 --generations 500
+python -m smiles_ga.goal_directed_generation --smiles_file data/prior/prior.csv --n_jobs 110 --generations 5 --n_mutations 10 --population_size 30 --gene_size 30 --random_start  
+
+# python -m smiles_ga.goal_directed_generation --smiles_file data/prior/prior.csv --n_jobs 90 --generations 500
 
 ## Graph GA
 # python -m graph_ga.goal_directed_generation --smiles_file data/prior/prior.csv --n_jobs 90 --generations 500
