@@ -56,19 +56,21 @@ class permeability_objective:
 class kras_objective:
     def __init__(self, input_type='smiles'):
         self.kras_ic50 = KRASInhibition(input_type=input_type)
-        self.perm = Permeability(input_type=input_type)
+        # self.perm = Permeability(input_type=input_type)
 
     def score(self, input_seq):
         kras_score = self.kras_ic50.trans_fn(self.kras_ic50.get_scores([input_seq]))
-        perm_score = self.perm.trans_fn(self.perm.get_scores([input_seq]))
-        return (kras_score + perm_score).tolist()[0] / 2
+        # perm_score = self.perm.trans_fn(self.perm.get_scores([input_seq]))
+        # return (kras_score + perm_score).tolist()[0] / 2
+        return kras_score.tolist()[0]
 
     def score_list(self, input_seqs):
         kras_scores = self.kras_ic50.trans_fn(self.kras_ic50.get_scores(input_seqs))
-        perm_scores = self.perm.trans_fn(self.perm.get_scores(input_seqs))
+        # perm_scores = self.perm.trans_fn(self.perm.get_scores(input_seqs))
 
-        scores = ((kras_scores + perm_scores)/2).tolist()
-        return scores
+        # scores = ((kras_scores + perm_scores)/2).tolist()
+        # return scores
+        return kras_scores.tolist()
 
 
 class ScoringFunctionWrapper:
