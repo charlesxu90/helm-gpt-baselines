@@ -1,7 +1,7 @@
 
 ##==== For test purposes ====
 ## SMILES GA
-# python -m smiles_ga.goal_directed_generation --smiles_file data/prior/prior.csv --n_jobs 110 --generations 5 --n_mutations 10 --population_size 30 --gene_size 30 --random_start  
+python -m smiles_ga.goal_directed_generation --smiles_file data/prior/prior.csv --n_jobs 110 --generations 5 --n_mutations 10 --population_size 30 --gene_size 30 --random_start  
 
 ## Graph GA
 # python -m graph_ga.goal_directed_generation --smiles_file data/prior/prior.csv --n_jobs 110 --generations 5 --population_size 30 --offspring_size 30 --random_start  

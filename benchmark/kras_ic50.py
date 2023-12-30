@@ -75,16 +75,15 @@ class KRASInhibition:
     """
         Predict permeability of peptides using helms as inputs
     """
-    def __init__(self, model_path='data/kras/kras_xgboost_reg.pkl', scaler_path='data/kras/kras_xgboost_reg_scaler.pkl', input_type='smiles'):
-        self.predictor, self.scaler = self.load_predictor(model_path, scaler_path)
+    def __init__(self, model_path='data/kras_kd/kras_xgboost_reg.pkl', input_type='smiles'):
+        self.predictor = self.load_predictor(model_path)
         self.trans_fn = TransformFunction('rsigmoid', 0, 2, params={'k': 1.})  # high: < 0 (1 nM), low > 2 (100 nM)
         self.input_type = input_type if input_type in ['helm', 'smiles'] else 'helm'
 
     @staticmethod
-    def load_predictor(model_path, scaler_path):
+    def load_predictor(model_path):
         predictor = joblib.load(model_path)
-        scaler = joblib.load(scaler_path)
-        return predictor, scaler
+        return predictor
 
     def get_features(self, input_seqs: list):
         if self.input_type == 'helm':
