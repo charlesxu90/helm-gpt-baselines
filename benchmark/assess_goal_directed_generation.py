@@ -9,7 +9,7 @@ from loguru import logger
 
 from .goal_directed_generator import GoalDirectedGenerator
 from .permeability import Permeability
-from .kras_ic50 import KRASInhibition
+from .kras import KRASInhibition
 from utils.metrics_utils import Metrics
 
 def get_time_string():
@@ -55,23 +55,32 @@ class permeability_objective:
 
 class kras_objective:
     def __init__(self, input_type='smiles'):
-        self.kras_ic50 = KRASInhibition(input_type=input_type)
-        # self.perm = Permeability(input_type=input_type)
+        self.kras = KRASInhibition(input_type=input_type)
 
     def score(self, input_seq):
-        kras_score = self.kras_ic50.trans_fn(self.kras_ic50.get_scores([input_seq]))
-        # perm_score = self.perm.trans_fn(self.perm.get_scores([input_seq]))
-        # return (kras_score + perm_score).tolist()[0] / 2
+        kras_score = self.kras.trans_fn(self.kras.get_scores([input_seq]))
         return kras_score.tolist()[0]
 
     def score_list(self, input_seqs):
-        kras_scores = self.kras_ic50.trans_fn(self.kras_ic50.get_scores(input_seqs))
-        # perm_scores = self.perm.trans_fn(self.perm.get_scores(input_seqs))
-
-        # scores = ((kras_scores + perm_scores)/2).tolist()
-        # return scores
+        kras_scores = self.kras.trans_fn(self.kras.get_scores(input_seqs))
         return kras_scores.tolist()
 
+class kras_perm_objective:
+    def __init__(self, input_type='smiles'):
+        self.kras = KRASInhibition(input_type=input_type)
+        self.perm = Permeability(input_type=input_type)
+
+    def score(self, input_seq):
+        kras_score = self.kras.trans_fn(self.kras.get_scores([input_seq]))
+        perm_score = self.perm.trans_fn(self.perm.get_scores([input_seq]))
+        return (kras_score + perm_score).tolist()[0] / 2
+
+    def score_list(self, input_seqs):
+        kras_scores = self.kras.trans_fn(self.kras.get_scores(input_seqs))
+        perm_scores = self.perm.trans_fn(self.perm.get_scores(input_seqs))
+
+        scores = ((kras_scores + perm_scores)/2).tolist()
+        return scores
 
 class ScoringFunctionWrapper:
     """
@@ -156,9 +165,11 @@ class GoalDirectedBenchmark:
 def goal_directed_suite_v2() -> List[GoalDirectedBenchmark]:
     return [
         # GoalDirectedBenchmark('permeability', permeability_objective(), number_molecules_to_generate=10),
-        GoalDirectedBenchmark('permeability', permeability_objective(), number_molecules_to_generate=1000),
+        # GoalDirectedBenchmark('permeability', permeability_objective(), number_molecules_to_generate=1000),
         # GoalDirectedBenchmark('kras', kras_objective(), number_molecules_to_generate=10),
         # GoalDirectedBenchmark('kras', kras_objective(), number_molecules_to_generate=1000),
+        # GoalDirectedBenchmark('kras_perm', kras_perm_objective(), number_molecules_to_generate=10),
+        GoalDirectedBenchmark('kras_perm', kras_perm_objective(), number_molecules_to_generate=1000),
     ]
 
 

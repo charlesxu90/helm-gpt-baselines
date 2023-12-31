@@ -7,3 +7,5 @@ result/
 data/
 figures/
 *.out
+*goal_directed_params.json
+*goal_directed_results.json

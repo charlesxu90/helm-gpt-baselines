@@ -9,7 +9,7 @@ from loguru import logger
 from tqdm import tqdm
 
 from .permeability import Permeability
-from .kras_ic50 import KRASInhibition
+from .kras import KRASInhibition
 from utils.helm_utils import get_cycpep_smi_from_helm
 
 

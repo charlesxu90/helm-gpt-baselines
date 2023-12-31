@@ -123,7 +123,7 @@ class Permeability:
     """
     def __init__(self, model_path='data/cpp/regression_rf.pkl', batch_size=1000, input_type='smiles'):
         self.predictor = self.load_predictor(model_path)
-        self.trans_fn = TransformFunction('sigmoid', -8, -6, params={'k': 1.})  # high: > -6, low < -6
+        self.trans_fn = TransformFunction('sigmoid', -8, -5, params={'k': 1.})  # high: > -6, low < -6
         self.batch_size = batch_size
         self.input_type = input_type if input_type in ['helm', 'smiles'] else 'helm'
 
