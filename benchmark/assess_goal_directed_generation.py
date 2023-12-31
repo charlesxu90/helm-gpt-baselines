@@ -156,9 +156,9 @@ class GoalDirectedBenchmark:
 def goal_directed_suite_v2() -> List[GoalDirectedBenchmark]:
     return [
         # GoalDirectedBenchmark('permeability', permeability_objective(), number_molecules_to_generate=10),
-        # GoalDirectedBenchmark('permeability', permeability_objective(), number_molecules_to_generate=1000),
+        GoalDirectedBenchmark('permeability', permeability_objective(), number_molecules_to_generate=1000),
         # GoalDirectedBenchmark('kras', kras_objective(), number_molecules_to_generate=10),
-        GoalDirectedBenchmark('kras', kras_objective(), number_molecules_to_generate=1000),
+        # GoalDirectedBenchmark('kras', kras_objective(), number_molecules_to_generate=1000),
     ]
 
 
