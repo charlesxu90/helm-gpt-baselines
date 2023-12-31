@@ -121,7 +121,7 @@ class Permeability:
     """
         Predict permeability of peptides using helms as inputs
     """
-    def __init__(self, model_path='data/cpp/regression_rf.pkl', batch_size=1000, input_type='smiles'):
+    def __init__(self, model_path='data/cpp/regression_rf.pkl', batch_size=10000, input_type='smiles'):
         self.predictor = self.load_predictor(model_path)
         self.trans_fn = TransformFunction('sigmoid', -8, -5, params={'k': 1.})  # high: > -6, low < -6
         self.batch_size = batch_size
@@ -161,23 +161,9 @@ class Permeability:
         if len(valid_features) == 0:
             return scores
         
-        # batch prediction
-        for bs in range(0, len(valid_idxes), self.batch_size):
-            batch_end = min(bs + self.batch_size, len(valid_idxes))
-            batch_idxes = valid_idxes[bs: batch_end]
-            batch_features = valid_features[bs: batch_end]
-
-            batch_features = np.nan_to_num(batch_features, nan=0.)
-            batch_features = np.clip(batch_features, np.finfo(np.float32).min, np.finfo(np.float32).max)
-            # scores[batch_idxes] = self.predictor.predict(batch_features)
-            try:
-                scores[batch_idxes] = self.predictor.predict(batch_features)
-            except:
-                for i, idx in enumerate(batch_idxes):
-                    try:
-                        scores[idx] = self.predictor.predict(batch_features[i].reshape(1, -1))
-                    except:
-                        logger.debug(f'Error in idx {idx}, features {batch_features}')
+        valid_features = np.nan_to_num(valid_features, nan=0.)
+        valid_features = np.clip(valid_features, np.finfo(np.float32).min, np.finfo(np.float32).max)
+        scores[valid_idxes] = self.predictor.predict(valid_features)
         return scores
 
 
