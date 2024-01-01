@@ -23,4 +23,4 @@ conda activate /home/xux/work/helm-gpt-baselines/env
 # python -m frag_gt.goal_directed_generation --fragstore_path frag_gt/data/fragment_libraries/guacamol_v1_all_fragstore_brics.pkl --smiles_file data/prior/prior.csv --generations 500
 
 ## Graph MCTS
-python -m graph_mcts.goal_directed_generation --generations 500 --n_jobs 90 --max_atoms 500
+python -m graph_mcts.goal_directed_generation --generations 500 --n_jobs 90 --max_atoms 200
